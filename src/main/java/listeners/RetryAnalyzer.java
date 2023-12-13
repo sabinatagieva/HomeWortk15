@@ -1,20 +1,28 @@
-package listeners;
+package base.driver;
 
-import org.testng.IRetryAnalyzer;
-import org.testng.ITestResult;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
-public class RetryAnalyzer implements IRetryAnalyzer {
+public class DriverInit {
+    private static volatile WebDriver driver = null;
 
-    int counter = 0;
+    private DriverInit() {}
 
-    int limit = 2;
-
-    @Override
-    public boolean retry(ITestResult iTestResult) {
-        if (counter < limit) {
-            counter++;
-            return true;
+    public synchronized static WebDriver getDriver() {
+        if (driver == null) {
+            synchronized (DriverInit.class) {
+                if (driver == null) {
+                    WebDriverManager.chromedriver().setup();
+                    driver = new ChromeDriver();
+                }
+            }
         }
-        return false;
+        return driver;
+    }
+
+    public static void quit() {
+        driver.quit();
+        driver = null;
     }
 }

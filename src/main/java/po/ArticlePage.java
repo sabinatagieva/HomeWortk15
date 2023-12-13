@@ -11,4 +11,7 @@ public class ArticlePage extends BaseMethods {
     public String getHeadingOfArticle() {
         return getText(firstHeading);
     }
+    public String firstHeadingHistory() {
+        return getText(firstHeadingHistory);
+    }
 }
